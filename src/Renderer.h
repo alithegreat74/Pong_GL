@@ -49,7 +49,7 @@ public:
 	float DeltaTime()const {return deltaTime;}
 
 private:
-	Time(){}
+	Time() { return; }
 	static Time instance;
 	float lastFrame=0.0f;
 	float deltaTime;

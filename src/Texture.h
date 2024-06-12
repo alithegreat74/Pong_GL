@@ -1,7 +1,8 @@
 #pragma once
-#include "stb_image.h"
 #include "References.h"
 #include <iostream>
+#include <stb_image/stb_image.h>
+
 
 struct TextureInfo
 {

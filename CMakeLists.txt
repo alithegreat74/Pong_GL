@@ -9,6 +9,7 @@ set(SRC_DIR "${CMAKE_SOURCE_DIR}/src")
 file(GLOB_RECURSE SRC_FILES "${SRC_DIR}/*.cpp" "${SRC_DIR}/*.c")
 list(APPEND SRC_FILES "main.cpp")
 list(APPEND SRC_FILES "${ThirdParty_Dir}/glad/glad.c")
+list(APPEND SRC_FILES "${ThirdParty_Dir}/stb_image/stb_image.cpp")
 file(GLOB_RECURSE ImGUI_SRC "${ThirdParty_Dir}/ImGui/*.cpp" "${ThirdParty_Dir}/ImGui/*.c")
 list(APPEND SRC_FILES ${ImGUI_SRC})
 
