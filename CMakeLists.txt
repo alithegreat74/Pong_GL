@@ -1,39 +1,36 @@
 ﻿cmake_minimum_required(VERSION 3.5)
 
+# Enable Hot Reload for MSVC compilers if supported.
+if (POLICY CMP0141)
+  cmake_policy(SET CMP0141 NEW)
+  set(CMAKE_MSVC_DEBUG_INFORMATION_FORMAT "$<IF:$<AND:$<C_COMPILER_ID:MSVC>,$<CXX_COMPILER_ID:MSVC>>,$<$<CONFIG:Debug,RelWithDebInfo>:EditAndContinue>,$<$<CONFIG:Debug,RelWithDebInfo>:ProgramDatabase>>")
+endif()
+
 project(Pong)
 
-# Set the directories for your third-party libraries
-set(thirdpartyDir ${CMAKE_SOURCE_DIR}/Thirdparty)
+add_executable(pong "main.cpp")
 
-# Include directories for header files
-include_directories(
-    "${thirdpartyDir}/GLAD"
-    "${thirdpartyDir}/ImGUI"
-    "${thirdpartyDir}/glm"
-    "${thirdpartyDir}/stb_image"
-    "${thirdpartyDir}/GLFW"
+include(FetchContent)
 
+# GLFW Dependency declare
+FetchContent_Declare(
+	GLFW
+	GIT_REPOSITORY https://github.com/glfw/glfw.git
+	GIT_TAG 3.4
 )
 
-# Add subdirectory for stb_image (assuming it has its own CMakeLists.txt)
-add_subdirectory("${thirdpartyDir}/stb_image")
+FetchContent_Declare(
+	GLEW
+	GIT_REPOSITORY https://github.com/Perlmint/glew-cmake.git
+	GIT_TAG glew-cmake-2.1.0
+)
+# Download and make GLFW available
+FetchContent_MakeAvailable(GLFW)
+FetchContent_MakeAvailable(GLEW)
 
-# Collect ImGui source files
-set(ImGUI_Dir "${thirdpartyDir}/ImGUI")
-file(GLOB_RECURSE ImGUI_SRC_FILES ${ImGUI_Dir}/*.cpp)
+target_link_libraries(pong PRIVATE glfw)
+# Include directories for GLEW
+target_include_directories(pong PRIVATE ${glew_SOURCE_DIR}/include)
 
-# Collect all source files in the src folder
-file(GLOB_RECURSE SRC_FILES ${CMAKE_SOURCE_DIR}/src/*.cpp ${CMAKE_SOURCE_DIR}/src/*.c)
-
-# Add glad source file
-list(APPEND SRC_FILES "${thirdpartyDir}/GLAD/glad.c")
-
-# Add main source file (make sure it's in the src directory)
-list(APPEND SRC_FILES "${CMAKE_SOURCE_DIR}/main.cpp")
-
-# Create the executable
-add_executable(pong ${SRC_FILES} ${ImGUI_SRC_FILES})
-
-# Link the static libraries
-set(glfw_lib "${thirdpartyDir}/src/glfw3.lib")
-target_link_libraries(pong ${glfw_lib} stb_image)
+# Link GLFW and GLEW to pong
+target_link_libraries(pong PRIVATE glew )
