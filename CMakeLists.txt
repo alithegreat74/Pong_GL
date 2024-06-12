@@ -1,36 +1,23 @@
-﻿cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.5.0)
 
-# Enable Hot Reload for MSVC compilers if supported.
-if (POLICY CMP0141)
-  cmake_policy(SET CMP0141 NEW)
-  set(CMAKE_MSVC_DEBUG_INFORMATION_FORMAT "$<IF:$<AND:$<C_COMPILER_ID:MSVC>,$<CXX_COMPILER_ID:MSVC>>,$<$<CONFIG:Debug,RelWithDebInfo>:EditAndContinue>,$<$<CONFIG:Debug,RelWithDebInfo>:ProgramDatabase>>")
-endif()
+project(PONG)
 
-project(Pong)
 
-add_executable(pong "main.cpp")
+set(ThirdParty_Dir "${CMAKE_SOURCE_DIR}/Thirdparty")
+set(SRC_DIR "${CMAKE_SOURCE_DIR}/src")
+#Getting all the c and cpp files needed in the project
+file(GLOB_RECURSE SRC_FILES "${SRC_DIR}/*.cpp" "${SRC_DIR}/*.c")
+list(APPEND SRC_FILES "main.cpp")
+list(APPEND SRC_FILES "${ThirdParty_Dir}/glad/glad.c")
+file(GLOB_RECURSE ImGUI_SRC "${ThirdParty_Dir}/ImGui/*.cpp" "${ThirdParty_Dir}/ImGui/*.c")
+list(APPEND SRC_FILES ${ImGUI_SRC})
 
-include(FetchContent)
-
-# GLFW Dependency declare
-FetchContent_Declare(
-	GLFW
-	GIT_REPOSITORY https://github.com/glfw/glfw.git
-	GIT_TAG 3.4
+#adding the include directories
+include_directories(
+	"${CMAKE_SOURCE_DIR}/src"
+	"${ThirdParty_Dir}"
 )
 
-FetchContent_Declare(
-	GLEW
-	GIT_REPOSITORY https://github.com/Perlmint/glew-cmake.git
-	GIT_TAG glew-cmake-2.1.0
-)
-# Download and make GLFW available
-FetchContent_MakeAvailable(GLFW)
-FetchContent_MakeAvailable(GLEW)
+add_executable(PONG ${SRC_FILES})
 
-target_link_libraries(pong PRIVATE glfw)
-# Include directories for GLEW
-target_include_directories(pong PRIVATE ${glew_SOURCE_DIR}/include)
-
-# Link GLFW and GLEW to pong
-target_link_libraries(pong PRIVATE glew )
+target_link_libraries(PONG "${ThirdParty_Dir}/GLFW/glfw3.lib")
