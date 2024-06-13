@@ -3,6 +3,8 @@
 #include "References.h"
 #include "Texture.h"
 #include "Renderer.h"
+#include "Input.h"
+#include "UserInterface.h"
 
 /// <summary>
 /// This file contains the data for every game object
@@ -37,6 +39,15 @@ protected:
 	glm::mat4 transform;
 	glm::vec4 color;
 	glm::vec3 size;
+	glm::vec3 position;
 	glm::vec2 speed;
 };
 
+class Racket :public GameObject, public InputListerner {
+public:
+	void Listen()override;
+	void Callback(int key, int action)override;
+	void SetInputs(int upKey, int downKey);
+private:
+	int upKey,downKey;
+};

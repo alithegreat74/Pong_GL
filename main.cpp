@@ -1,36 +1,14 @@
 #include <iostream>
 #include "GameObject.h"
 #include "UserInterface.h"
+#include "Input.h"
 
 //Configuring the Game object
 static GameObject ball;
-static GameObject racketA;
-static GameObject racketB;
+static Racket racketA;
+static Racket racketB;
 
 
-void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
-{
-    if (key == GLFW_KEY_W && action==GLFW_PRESS)
-        racketA.SetSpeed(glm::vec2(0.0, 10));
-    else if(key==GLFW_KEY_W && action==GLFW_RELEASE)
-        racketA.SetSpeed(glm::vec2(0.0, 0.0));
-
-    if (key == GLFW_KEY_S && action == GLFW_PRESS)
-        racketA.SetSpeed(glm::vec2(0.0, -10));
-    else if (key == GLFW_KEY_S && action == GLFW_RELEASE)
-        racketA.SetSpeed(glm::vec2(0.0, 0.0));
-
-    if (key == GLFW_KEY_DOWN && action == GLFW_PRESS)
-        racketB.SetSpeed(glm::vec2(0.0, -10));
-    else if (key == GLFW_KEY_DOWN && action == GLFW_RELEASE)
-        racketB.SetSpeed(glm::vec2(0.0, 0.0));
-
-    if (key == GLFW_KEY_UP && action == GLFW_PRESS)
-        racketB.SetSpeed(glm::vec2(0.0, 10));
-    else if (key == GLFW_KEY_UP && action == GLFW_RELEASE)
-        racketB.SetSpeed(glm::vec2(0.0, 0.0));
-
-}
 
 int main() {
     //Initialize GLFW
@@ -68,7 +46,7 @@ int main() {
 
 
     //Callback Function Set Start
-    glfwSetKeyCallback(window, key_callback);
+    glfwSetKeyCallback(window, InputManager::Get().KeyboardCallback);
     //Callback Function Set Stop
 
     //Configuring the shader files and shader program
@@ -102,6 +80,8 @@ int main() {
     racketA.Start(glm::vec4(0.0, 1.0, 0.0, 1.0), glm::vec3(-32.0, 0, 0), glm::vec3(0.03, 0.3, 1.0));
     racketB.Start(glm::vec4(0.0, 0.0, 1.0, 1.0), glm::vec3(32.0, 0, 0), glm::vec3(0.03, 0.3, 1.0));
     
+    racketA.SetInputs(GLFW_KEY_W, GLFW_KEY_S);
+    racketB.SetInputs(GLFW_KEY_UP, GLFW_KEY_DOWN);
 
     while (!glfwWindowShouldClose(window)) {
         glClearColor(UI::backgroundColor[0], UI::backgroundColor[1], UI::backgroundColor[2], UI::backgroundColor[3]);

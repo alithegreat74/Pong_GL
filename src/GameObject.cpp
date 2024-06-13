@@ -43,12 +43,18 @@ void GameObject::Start(glm::vec4 color, glm::vec3 pos,glm::vec3 scale)
 	this->color = color;
 	transform = glm::mat4(1.0f);
 	transform = glm::scale(transform, scale);
+	size = scale;
 	transform = glm::translate(transform, pos);
+	position = pos;
 }
 
 void GameObject::Move()
 {
+	if (position.y + speed.y >= 400 || position.y + speed.y <= -400)
+		return;
+
 	transform = glm::translate(transform, glm::vec3(speed.x,speed.y,0.0)*Time::Get().DeltaTime());
+	position += glm::vec3(speed.x, speed.y, 0.0);	
 }
 
 void GameObject::SetSpeed(glm::vec2 speed)
@@ -56,3 +62,31 @@ void GameObject::SetSpeed(glm::vec2 speed)
 	this->speed = speed;
 }
 
+void Racket::Listen()
+{
+	InputManager::Get().AddListerners("Keyboard Event", std::bind(&Racket::Callback, this, std::placeholders::_1, std::placeholders::_2));
+}
+
+void Racket::Callback(int key, int action)
+{
+	if (action == GLFW_PRESS) {
+		if (key == upKey) {
+			SetSpeed(glm::vec2(0, UI::racketSpeed));
+		}
+		if (key == downKey) {
+			SetSpeed(glm::vec2(0, -1*UI::racketSpeed));
+		}
+	}
+	else
+	{
+		if (key == upKey || key == downKey)
+			SetSpeed(glm::vec2(0, 0));
+	}
+}
+
+void Racket::SetInputs(int upKey, int downKey)
+{
+	this->upKey = upKey;
+	this->downKey = downKey;
+	Listen();
+}

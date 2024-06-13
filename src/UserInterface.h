@@ -6,7 +6,6 @@
 
 namespace UI {
 	extern float backgroundColor[4];
-	extern float racketAPos[2];
-	extern float racketBPos[2];
+	extern float racketSpeed;
 	void RenderUI();
 }
