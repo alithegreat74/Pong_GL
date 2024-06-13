@@ -17,6 +17,7 @@ Shader::~Shader()
 
 std::string Shader::ReadFromFile(const char* filePath)
 {
+	//Open the file
 	std::ifstream stream(filePath);
 	if (!stream.is_open()) {
 		std::cout << "Unable to open shader file at " << filePath << "\n";
@@ -24,7 +25,7 @@ std::string Shader::ReadFromFile(const char* filePath)
 	}
 
 	std::string buffer, out="";
-
+	//Read the shader file line by line
 	while (std::getline(stream,buffer))
 	{
 		out += buffer+'\n';
@@ -35,12 +36,13 @@ std::string Shader::ReadFromFile(const char* filePath)
 
 void Shader::ValidateShader() const
 {
+
 	int success;
-	glGetShaderiv(object_id, GL_COMPILE_STATUS, &success);
+	glGetShaderiv(object_id, GL_COMPILE_STATUS, &success); //Checks the shader compilation status 
 	if(!success)
 	{
 		char log[1024];
-		glGetShaderInfoLog(object_id, 255, NULL, log);
+		glGetShaderInfoLog(object_id, 255, NULL, log);	//Gets the Error if the compilation is failed
 		std::cout << log << "\n";
 		return;
 	}
@@ -48,11 +50,14 @@ void Shader::ValidateShader() const
 
 ShaderProgram::ShaderProgram(Shader vertexShader, Shader fragmentShader)
 {
+	//Creates a shader program and attaches the vertex and fragment shader
 	object_id = glCreateProgram();
 	glAttachShader(object_id, vertexShader.GetShader());
 	glAttachShader(object_id, fragmentShader.GetShader());
 
 	glLinkProgram(object_id);
+
+	Unbind();
 
 }
 
@@ -73,47 +78,46 @@ void ShaderProgram::Unbind() const
 
 void ShaderProgram::ChangeUniform(const char* name, float data) const
 {
-	unsigned int location = glGetUniformLocation(object_id, name);
-	glUniform1f(location, data);
+	glUniform1f(glGetUniformLocation(object_id, name), data);
 }
 
 void ShaderProgram::ChangeUniform(const char* name, int i1) const
 {
-	unsigned int location = glGetUniformLocation(object_id, name);
-	glUniform1i(location, i1);
+	glUniform1i(glGetUniformLocation(object_id, name), i1);
 }
 
 void ShaderProgram::ChangeUniform(const char* name, float f1, float f2, float f3,float f4)
 {
-	unsigned int location = glGetUniformLocation(object_id, name);
-	glUniform4f(location, f1, f2, f3, f4);
+	glUniform4f(glGetUniformLocation(object_id, name), f1, f2, f3, f4);
 }
 
 void ShaderProgram::ChangeUniform(const char* name, float f1, float f2, float f3)
 {
-	unsigned int location = glGetUniformLocation(object_id, name);
-	glUniform3f(location, f1, f2, f3);
+	glUniform3f(glGetUniformLocation(object_id, name), f1, f2, f3);
 }
 
 void ShaderProgram::ChangeUniform(const char* name, glm::vec3 value)
 {
-	unsigned int location = glGetUniformLocation(object_id, name);
-	glUniform3f(location, value.x, value.y, value.z);
+	glUniform3f(glGetUniformLocation(object_id, name), value.x, value.y, value.z);
+}
+
+void ShaderProgram::ChangeUniform(const char* name, glm::vec4 value)
+{
+	glUniform4f(glGetUniformLocation(object_id, name), value.x, value.y, value.z, value.w);
 }
 
 void ShaderProgram::ChangeUniform(const char* name, glm::mat4 value)
 {
-	unsigned int location = glGetUniformLocation(object_id, name);
-	glUniformMatrix4fv(location, 1, false, glm::value_ptr(value));
+	glUniformMatrix4fv(glGetUniformLocation(object_id, name), 1, false, glm::value_ptr(value));
 }
 
 void ShaderProgram::Validate() const
 {
 	int success;
-	glGetProgramiv(object_id, GL_LINK_STATUS, &success);
+	glGetProgramiv(object_id, GL_LINK_STATUS, &success);	//Checks the program's linkage status
 	if (!success) {
 		char log[255];
-		glGetProgramInfoLog(object_id, 255, NULL, log);
+		glGetProgramInfoLog(object_id, 255, NULL, log);	 //Writes the error if it has failed to link the program
 		std::cout << log<<"\n";
 		return;
 	}

@@ -19,6 +19,25 @@ include_directories(
 	"${ThirdParty_Dir}"
 )
 
+#Setting the texture files
+file(GLOB TEXTURE_FILES "${SRC_DIR}/Textures/*.png")
+
+foreach(TEXTURE_FILE ${TEXTURE_FILES})
+    get_filename_component(FILE_NAME ${TEXTURE_FILE} NAME)
+    configure_file(${TEXTURE_FILE} "${CMAKE_BINARY_DIR}/src/Textures/${FILE_NAME}" COPYONLY)
+endforeach()
+
+#setting the shader files
+file(GLOB SHADER_FILES "${SRC_DIR}/Shaders/*.glsl")
+foreach(SHADER_FILE ${SHADER_FILES})
+	get_filename_component(FILE_NAME ${SHADER_FILE} NAME)
+	configure_file(${SHADER_FILE} "${CMAKE_BINARY_DIR}/src/Shaders/${FILE_NAME}" COPYONLY)
+endforeach()
+
 add_executable(PONG ${SRC_FILES})
 
-target_link_libraries(PONG "${ThirdParty_Dir}/GLFW/glfw3.lib")
+if(MINGW)
+	target_link_libraries(PONG -lopengl32 -lgdi32 "${ThirdParty_Dir}/GLFW/libglfw3.a" imm32)
+else()
+	target_link_libraries(PONG "${ThirdParty_Dir}/GLFW/glfw3.lib")
+endif()
