@@ -2,11 +2,11 @@
 
 
 InputManager InputManager::instance;
-std::unordered_map<std::string, std::vector<InputCallback>> InputManager::listerners = std::unordered_map<std::string, std::vector<InputCallback>>();
+std::unordered_map<int, std::vector<InputCallback>> InputManager::listerners = std::unordered_map<int, std::vector<InputCallback>>();
 
-void InputManager::AddListerners(std::string eventName, InputCallback callback)
+void InputManager::AddListerners(int key, InputCallback callback)
 {
-	auto& inputEvent = listerners.find(eventName);
+	auto& inputEvent = listerners.find(key);
 	//If there is an list of callbacks for this event, just add it to the list
 	if (inputEvent != listerners.end()) {
 		inputEvent->second.push_back(callback);
@@ -15,17 +15,17 @@ void InputManager::AddListerners(std::string eventName, InputCallback callback)
 	{
 		std::vector<InputCallback> newSet;
 		newSet.push_back(callback);
-		listerners.insert({eventName,newSet});
+		listerners.insert({key,newSet});
 	}
 }
 
 void InputManager::KeyboardCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-	auto& inputEvent = listerners.find("Keyboard Event");
+	auto& inputEvent = listerners.find(key);
 
 	if (inputEvent != listerners.end()) {
 		for (auto& callback : inputEvent->second) {
-			callback(key,action);
+			callback(action);
 		}
 	}
 }

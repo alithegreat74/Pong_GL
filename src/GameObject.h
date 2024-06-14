@@ -30,7 +30,7 @@ public :
 	//Creates and sets the buffers and textures and shaders for the gameobject
 	~GameObject();
 	//Renders the gameobject using with the given texture and shader
-	void Render(Texture2D& texture, ShaderProgram& shader);
+	virtual void Render(Texture2D& texture, ShaderProgram& shader);
 	void Start(glm::vec4 color, glm::vec3 pos,glm::vec3 scale);
 	void Move();
 	void SetSpeed(glm::vec2 speed);
@@ -43,11 +43,15 @@ protected:
 	glm::vec2 speed;
 };
 
-class Racket :public GameObject, public InputListerner {
+class Racket :public GameObject {
 public:
-	void Listen()override;
-	void Callback(int key, int action)override;
+	void Listen();
+	void UpKeyCallback(int action);
+	void DownKeyCallback(int action);
 	void SetInputs(int upKey, int downKey);
+	void Render(Texture2D& texture, ShaderProgram& shader)override;
+	void HandleMovement();
 private:
 	int upKey,downKey;
+	bool upWasPressed, downWasPressed;
 };

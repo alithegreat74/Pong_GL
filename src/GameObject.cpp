@@ -50,6 +50,7 @@ void GameObject::Start(glm::vec4 color, glm::vec3 pos,glm::vec3 scale)
 
 void GameObject::Move()
 {
+
 	if (position.y + speed.y >= 400 || position.y + speed.y <= -400)
 		return;
 
@@ -64,29 +65,49 @@ void GameObject::SetSpeed(glm::vec2 speed)
 
 void Racket::Listen()
 {
-	InputManager::Get().AddListerners("Keyboard Event", std::bind(&Racket::Callback, this, std::placeholders::_1, std::placeholders::_2));
+	InputManager::Get().AddListerners(upKey, std::bind(&Racket::UpKeyCallback, this, std::placeholders::_1));
+	InputManager::Get().AddListerners(downKey, std::bind(&Racket::DownKeyCallback, this, std::placeholders::_1));
 }
 
-void Racket::Callback(int key, int action)
+void Racket::UpKeyCallback(int action)
 {
-	if (action == GLFW_PRESS) {
-		if (key == upKey) {
-			SetSpeed(glm::vec2(0, UI::racketSpeed));
-		}
-		if (key == downKey) {
-			SetSpeed(glm::vec2(0, -1*UI::racketSpeed));
-		}
-	}
-	else
-	{
-		if (key == upKey || key == downKey)
-			SetSpeed(glm::vec2(0, 0));
-	}
+	if (action == GLFW_PRESS)
+		upWasPressed = true;
+	else if (action == GLFW_RELEASE)
+		upWasPressed = false;
 }
+
+void Racket::DownKeyCallback(int action)
+{
+	if (action == GLFW_PRESS)
+		downWasPressed = true;
+	else if(action==GLFW_RELEASE)
+		downWasPressed = false;	
+}
+
 
 void Racket::SetInputs(int upKey, int downKey)
 {
 	this->upKey = upKey;
 	this->downKey = downKey;
 	Listen();
+}
+
+void Racket::Render(Texture2D& texture, ShaderProgram& shader)
+{
+	HandleMovement();
+	GameObject::Render(texture, shader);
+}
+
+void Racket::HandleMovement()
+{
+	if (upWasPressed == downWasPressed)
+		SetSpeed(glm::vec2(0, 0));
+	else
+	{
+		if (upWasPressed)
+			SetSpeed(glm::vec2(0, UI::racketSpeed));
+		else
+			SetSpeed(glm::vec2(0, -1 * UI::racketSpeed));
+	}
 }

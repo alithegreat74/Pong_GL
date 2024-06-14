@@ -8,4 +8,8 @@ namespace UI {
 	extern float backgroundColor[4];
 	extern float racketSpeed;
 	void RenderUI();
+	void Init(GLFWwindow* window);
+
+	void DebugWindow();
+	void CleanUp();
 }

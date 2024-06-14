@@ -60,20 +60,7 @@ int main() {
     Texture2D defaultTexture(loader.LoadImage("src/Textures/DefaultTexture.png"));
     Texture2D defaultCircleTexture(loader.LoadImage("src/Textures/DefaultTextureCircle.png"));
 
-
-    // Initialize ImGui context
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO(); (void)io;
-
-    // Initialize ImGui for GLFW and OpenGL
-    ImGui_ImplGlfw_InitForOpenGL(window, true);
-    ImGui_ImplOpenGL3_Init("#version 330");
-
-    // Setup ImGui style
-    ImGui::StyleColorsDark();
-    
-    //Setting the positions
+    UI::Init(window);
 
     //Running the start funcitons
     ball.Start(glm::vec4(1.0), glm::vec3(0.0), glm::vec3(0.08, 0.145, 1.0));
@@ -98,15 +85,7 @@ int main() {
 
 
         //User Interface Start
-        // Start the ImGui frame
-        ImGui_ImplOpenGL3_NewFrame();
-        ImGui_ImplGlfw_NewFrame();
-        ImGui::NewFrame();
-        // Render UI
         UI::RenderUI();
-        // Render ImGui
-        ImGui::Render();
-        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
         //User Interface End
 
         
@@ -117,11 +96,7 @@ int main() {
 
         Time::Get().CalculateTime();
     }
-
-    // Cleanup ImGui
-    ImGui_ImplOpenGL3_Shutdown();
-    ImGui_ImplGlfw_Shutdown();
-    ImGui::DestroyContext();
+    UI::CleanUp();
     //Destroy GLFW
     glfwTerminate();
     return 0;
