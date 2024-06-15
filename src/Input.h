@@ -11,6 +11,7 @@
 /// </summary>
 
 using InputCallback = std::function<void(int)>;
+
 class InputManager {
 public:
 	static InputManager& Get() {

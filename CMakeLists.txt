@@ -34,7 +34,7 @@ foreach(SHADER_FILE ${SHADER_FILES})
 	configure_file(${SHADER_FILE} "${CMAKE_BINARY_DIR}/src/Shaders/${FILE_NAME}" COPYONLY)
 endforeach()
 
-add_executable(PONG ${SRC_FILES})
+add_executable(PONG ${SRC_FILES} "src/Collision.h")
 
 if(MINGW)
 	target_link_libraries(PONG -lopengl32 -lgdi32 "${ThirdParty_Dir}/GLFW/libglfw3.a" imm32)

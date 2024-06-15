@@ -1,6 +1,11 @@
 #include "GameObject.h"
 
 
+GameObject::GameObject():vao(0),vbo(0), transform(glm::mat4(1.0)), color(glm::vec4(0.0)), size(glm::vec3(0.0)), speed(glm::vec2(0))
+{
+
+}
+
 GameObject::~GameObject()
 {
 	glDeleteBuffers(1, &vbo);
@@ -10,7 +15,6 @@ GameObject::~GameObject()
 void GameObject::Render(Texture2D& texture, ShaderProgram& shader)
 {
 	shader.Bind();
-	Move();
 	shader.ChangeUniform("color", color);
 	shader.ChangeUniform("transform", transform);
 	texture.Bind();
@@ -45,22 +49,21 @@ void GameObject::Start(glm::vec4 color, glm::vec3 pos,glm::vec3 scale)
 	transform = glm::scale(transform, scale);
 	size = scale;
 	transform = glm::translate(transform, pos);
-	position = pos;
+
 }
 
 void GameObject::Move()
 {
-
-	if (position.y + speed.y >= 400 || position.y + speed.y <= -400)
-		return;
-
-	transform = glm::translate(transform, glm::vec3(speed.x,speed.y,0.0)*Time::Get().DeltaTime());
-	position += glm::vec3(speed.x, speed.y, 0.0);	
+	transform = glm::translate(transform, glm::vec3(speed.x,speed.y,0.0) * Time::Get().DeltaTime());
 }
 
 void GameObject::SetSpeed(glm::vec2 speed)
 {
-	this->speed = speed;
+	this->speed = glm::vec2(speed.x, speed.y);
+}
+
+Racket::Racket():GameObject(),upKey(0),downKey(0),upWasPressed(0),downWasPressed(0)
+{
 }
 
 void Racket::Listen()
@@ -96,6 +99,7 @@ void Racket::SetInputs(int upKey, int downKey)
 void Racket::Render(Texture2D& texture, ShaderProgram& shader)
 {
 	HandleMovement();
+	Move();
 	GameObject::Render(texture, shader);
 }
 
@@ -110,4 +114,36 @@ void Racket::HandleMovement()
 		else
 			SetSpeed(glm::vec2(0, -1 * UI::racketSpeed));
 	}
+}
+
+void Racket::Move()
+{
+	if (transform[3].y + speed.y *Time::Get().DeltaTime() >= 0.9 || transform[3].y + speed.y * Time::Get().DeltaTime() <= -0.9)
+		return;
+
+	GameObject::Move();
+}
+
+void Ball::Render(Texture2D& texture, ShaderProgram& shader)
+{
+	Move();
+	GameObject::Render(texture,shader);
+}
+
+void Ball::Move()
+{
+	if (transform[3].y + speed.y >= 6 || transform[3].y + speed.y <= -6)
+		VerticalReverse();
+
+	GameObject::Move();
+}
+
+void Ball::VerticalReverse()
+{
+	SetSpeed(glm::vec2(speed.x, speed.y * -1));
+}
+
+void Ball::HorizontalReverse()
+{
+	SetSpeed(glm::vec2(speed.x * -1, speed.y));
 }

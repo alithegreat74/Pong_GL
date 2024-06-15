@@ -5,6 +5,7 @@
 #include "Renderer.h"
 #include "Input.h"
 #include "UserInterface.h"
+#include "Collision.h"
 
 /// <summary>
 /// This file contains the data for every game object
@@ -27,31 +28,41 @@ static float vertecies[]{
 
 class GameObject {
 public :
-	//Creates and sets the buffers and textures and shaders for the gameobject
+	GameObject();
 	~GameObject();
+	//Creates and sets the buffers and textures and shaders for the gameobject
 	//Renders the gameobject using with the given texture and shader
 	virtual void Render(Texture2D& texture, ShaderProgram& shader);
 	void Start(glm::vec4 color, glm::vec3 pos,glm::vec3 scale);
-	void Move();
+	virtual void Move();
 	void SetSpeed(glm::vec2 speed);
+	glm::mat4 transform;
+	glm::vec3 size;
+	glm::vec2 speed;
 protected:
 	unsigned int vbo, vao;
-	glm::mat4 transform;
 	glm::vec4 color;
-	glm::vec3 size;
-	glm::vec3 position;
-	glm::vec2 speed;
 };
 
-class Racket :public GameObject {
+class Racket :public GameObject{
 public:
+	Racket();
 	void Listen();
 	void UpKeyCallback(int action);
 	void DownKeyCallback(int action);
 	void SetInputs(int upKey, int downKey);
 	void Render(Texture2D& texture, ShaderProgram& shader)override;
 	void HandleMovement();
+	void Move()override;
 private:
 	int upKey,downKey;
 	bool upWasPressed, downWasPressed;
+};
+
+class Ball : public GameObject {
+public:
+	void Render(Texture2D& texture, ShaderProgram& shader)override;
+	void Move()override;
+	void VerticalReverse();
+	void HorizontalReverse();
 };

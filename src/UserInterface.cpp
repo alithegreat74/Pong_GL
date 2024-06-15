@@ -2,19 +2,26 @@
 
 float UI::backgroundColor[4]= { 0.0f, 0.0f, 0.0f,1.0f };
 float UI::racketSpeed = 10;
-void UI::RenderUI() {
+float UI::ballSpeed = 5;
+void UI::RenderUI(GLFWwindow* window) {
 
     // Start the ImGui frame
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
 
-
+    //Show debug window
     DebugWindow();
+
 
     // Render ImGui
     ImGui::Render();
+
+    int display_w, display_h;
+    glfwGetFramebufferSize(window, &display_w, &display_h);
+    glViewport(0, 0, display_w, display_h);
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
 }
 
 void UI::Init(GLFWwindow*window)
@@ -38,6 +45,7 @@ void UI::DebugWindow()
     ImGui::Begin("Debugger", nullptr);
     ImGui::DragFloat4("Color Clear", backgroundColor, 0.05f, 0.0f, 1.0);
     ImGui::InputFloat("Racket Speed", &racketSpeed);
+    ImGui::InputFloat("Ball Speed", &ballSpeed);
     ImGui::End();
 }
 

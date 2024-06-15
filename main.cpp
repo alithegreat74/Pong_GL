@@ -4,7 +4,7 @@
 #include "Input.h"
 
 //Configuring the Game object
-static GameObject ball;
+static Ball ball;
 static Racket racketA;
 static Racket racketB;
 
@@ -63,12 +63,17 @@ int main() {
     UI::Init(window);
 
     //Running the start funcitons
-    ball.Start(glm::vec4(1.0), glm::vec3(0.0), glm::vec3(0.08, 0.145, 1.0));
+    ball.Start(glm::vec4(1.0), glm::vec3(0.0), glm::vec3(0.04, 0.075, 1.0));
     racketA.Start(glm::vec4(0.0, 1.0, 0.0, 1.0), glm::vec3(-32.0, 0, 0), glm::vec3(0.03, 0.3, 1.0));
     racketB.Start(glm::vec4(0.0, 0.0, 1.0, 1.0), glm::vec3(32.0, 0, 0), glm::vec3(0.03, 0.3, 1.0));
-    
+
+    //Input configuration
     racketA.SetInputs(GLFW_KEY_W, GLFW_KEY_S);
     racketB.SetInputs(GLFW_KEY_UP, GLFW_KEY_DOWN);
+
+    //Setting the ball's initial speed
+    Time::Get().CalculateTime();
+    ball.SetSpeed(glm::vec2(5, -5));
 
     while (!glfwWindowShouldClose(window)) {
         glClearColor(UI::backgroundColor[0], UI::backgroundColor[1], UI::backgroundColor[2], UI::backgroundColor[3]);
@@ -76,16 +81,13 @@ int main() {
 
 
         //Render Game Objects start
-
         ball.Render(defaultCircleTexture, program);
         racketA.Render(defaultTexture,program);
         racketB.Render(defaultTexture, program);
-
         //Render Game Objects End
 
-
         //User Interface Start
-        UI::RenderUI();
+        UI::RenderUI(window);
         //User Interface End
 
         
@@ -95,6 +97,12 @@ int main() {
         glfwPollEvents();
 
         Time::Get().CalculateTime();
+       
+
+        if (Collision::CheckCollision(Collision::GetCollisionSides(racketA.transform, racketA.size), Collision::GetCollisionSides(ball.transform, ball.size)) ||
+            Collision::CheckCollision(Collision::GetCollisionSides(racketB.transform, racketB.size), Collision::GetCollisionSides(ball.transform, ball.size))) {
+            ball.HorizontalReverse();
+        }
     }
     UI::CleanUp();
     //Destroy GLFW
