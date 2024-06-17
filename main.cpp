@@ -2,6 +2,9 @@
 #include "GameObject.h"
 #include "UserInterface.h"
 #include "Input.h"
+#include "AudioManager.h"
+
+
 //Configuring the Game object
 static Ball ball;
 static Racket racketA;
@@ -73,6 +76,8 @@ int main() {
     racketA.SetInputs(GLFW_KEY_W, GLFW_KEY_S);
     racketB.SetInputs(GLFW_KEY_UP, GLFW_KEY_DOWN);
 
+
+    //Add the collidable objects to the collision detector
     Collision::objects.push_back(&racketA);
     Collision::objects.push_back(&racketB);
 
@@ -80,6 +85,8 @@ int main() {
     Time::Get().CalculateTime();
     ball.direction = glm::vec3(1, -1, 0);
 
+    //Play the game music on a loop
+    Audio::PlayAudio("src/Audio/breakout.mp3",true);
 
     while (!glfwWindowShouldClose(window)) {
         glClearColor(UI::backgroundColor[0], UI::backgroundColor[1], UI::backgroundColor[2], UI::backgroundColor[3]);
@@ -104,6 +111,8 @@ int main() {
 
         Time::Get().CalculateTime();
     }
+
+    Audio::Cleanup();
     UI::CleanUp();
     //Destroy GLFW
     glfwTerminate();

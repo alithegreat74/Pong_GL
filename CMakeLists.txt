@@ -42,10 +42,22 @@ foreach(FONT_FILE ${FONT_FILES})
 	configure_file(${FONT_FILE} "${CMAKE_BINARY_DIR}/src/Fonts/${FILE_NAME}" COPYONLY)
 endforeach()
 
+#setting the audio files
+file(GLOB AUDIO_FILES "${SRC_DIR}/Audio/*.mp3" "${SRC_DIR}/Audio/*.wav")
+foreach(AUDIO_FILE ${AUDIO_FILES})
+	get_filename_component(FILE_NAME ${AUDIO_FILE} NAME)
+	configure_file(${AUDIO_FILE} "${CMAKE_BINARY_DIR}/src/Audio/${FILE_NAME}" COPYONLY)
+endforeach()
+
 add_executable(PONG ${SRC_FILES} "src/Collision.h"  )
 
-if(MINGW)
-	target_link_libraries(PONG -lopengl32 -lgdi32 "${ThirdParty_Dir}/GLFW/libglfw3.a" imm32)
-else()
-	target_link_libraries(PONG "${ThirdParty_Dir}/GLFW/glfw3.lib")
-endif()
+
+target_link_libraries(PONG "${ThirdParty_Dir}/GLFW/glfw3.lib" "${ThirdParty_Dir}/irrKlang/irrKlang.lib")
+
+
+add_custom_command(TARGET PONG POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+    "${ThirdParty_Dir}/irrKlang/irrKlang.dll"
+    "${ThirdParty_Dir}/irrKlang/ikpMP3.dll"
+    "${ThirdParty_Dir}/irrKlang/ikpFlac.dll"
+    $<TARGET_FILE_DIR:PONG>)

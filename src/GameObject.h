@@ -6,6 +6,7 @@
 #include "Input.h"
 #include "UserInterface.h"
 #include "Collision.h"
+#include "AudioManager.h"
 
 /// <summary>
 /// This file contains the data for every game object

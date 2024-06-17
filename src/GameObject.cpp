@@ -136,18 +136,21 @@ void Ball::Render(Texture2D& texture, ShaderProgram& shader)
 
 	lastCollisonTime = glfwGetTime();
 	color = collider->color;
+	//Play deflect sound
+	Audio::PlayAudio("src/Audio/solid.wav", false);
 	HorizontalReverse();
 }
 
 void Ball::Move()
 {
-	//If the ball is going out of bounds horizontally
-	if ((transform[3].x >= 1.05 && direction.x > 0)) {
-		UI::scoreA++;
-		Restart();
-	}
-	if ((transform[3].x <= -1.05f && direction.x < 0)) {
-		UI::scoreB++;
+	//If the ball is going out of bounds horizontally add The score and restart the game
+	if ((transform[3].x >= 1.05 && direction.x > 0) || (transform[3].x <= -1.05f && direction.x < 0)) {
+		if (direction.x > 0)
+			UI::scoreA++;
+		else
+			UI::scoreB++;
+		//Play Wining sound
+		Audio::PlayAudio("src/Audio/bleep.wav", false);
 		Restart();
 	}
 	//If the ball is going out of bounds vertically

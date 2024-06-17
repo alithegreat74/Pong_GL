@@ -59,8 +59,8 @@ void UI::DebugWindow()
     ImGui::PushFont(menuFont);
     ImGui::Begin("Debugger", nullptr);
     ImGui::DragFloat4("Color Clear", backgroundColor, 0.05f, 0.0f, 1.0);
-    ImGui::DragFloat("Racket Speed", &racketSpeed,0.1f);
-    ImGui::DragFloat("Ball Speed", &ballSpeed,0.1f);
+    ImGui::DragFloat("Racket Speed", &racketSpeed, 0.1f);
+    ImGui::DragFloat("Ball Speed", &ballSpeed, 0.1f);
     ImGui::PopFont();
     ImGui::End();
 }
