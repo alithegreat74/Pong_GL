@@ -131,7 +131,10 @@ void Ball::Render(Texture2D& texture, ShaderProgram& shader)
 	GameObject* collider = Collision::CheckCollisions(this);
 	if (collider==NULL)
 		return;
-	
+	if (glfwGetTime() - lastCollisonTime <= 0.5)
+		return;
+
+	lastCollisonTime = glfwGetTime();
 	color = collider->color;
 	HorizontalReverse();
 }
@@ -139,8 +142,14 @@ void Ball::Render(Texture2D& texture, ShaderProgram& shader)
 void Ball::Move()
 {
 	//If the ball is going out of bounds horizontally
-	if ((transform[3].x >= 1.05 && direction.x > 0) || (transform[3].x <= -1.05f && direction.x < 0))
+	if ((transform[3].x >= 1.05 && direction.x > 0)) {
+		UI::scoreA++;
 		Restart();
+	}
+	if ((transform[3].x <= -1.05f && direction.x < 0)) {
+		UI::scoreB++;
+		Restart();
+	}
 	//If the ball is going out of bounds vertically
 	if ((transform[3].y>=1 && direction.y>0) || (transform[3].y<-1 && direction.y<0))
 		VerticalReverse();
@@ -160,6 +169,7 @@ void Ball::HorizontalReverse()
 
 void Ball::Restart()
 {
+	color = glm::vec4(1.0, 1.0, 1.0, 1.0);
 	transform = glm::mat4(1.0);
 	transform = glm::scale(transform, size);
 }

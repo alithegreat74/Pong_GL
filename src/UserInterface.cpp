@@ -4,6 +4,11 @@ float UI::backgroundColor[4]= { 0.0f, 0.0f, 0.0f,1.0f };
 float UI::racketSpeed = 5;
 float UI::ballSpeed = 5;
 
+unsigned int UI::scoreA=0, UI::scoreB=0;
+
+ImFont* UI::scoreFont;
+ImFont* UI::menuFont;
+
 
 void UI::RenderUI(GLFWwindow* window) {
 
@@ -12,6 +17,10 @@ void UI::RenderUI(GLFWwindow* window) {
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
 
+
+    //Show Score
+    ScoreWindow();
+    
     //Show debug window
     DebugWindow();
 
@@ -37,6 +46,9 @@ void UI::Init(GLFWwindow*window)
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init("#version 330");
 
+    scoreFont = io.Fonts->AddFontFromFileTTF("src/fonts/arial.ttf", 82.0f);
+    menuFont = io.Fonts->AddFontFromFileTTF("src/fonts/arial.ttf", 24.0);
+
 
     // Setup ImGui style
     ImGui::StyleColorsDark();
@@ -44,10 +56,24 @@ void UI::Init(GLFWwindow*window)
 
 void UI::DebugWindow()
 {
+    ImGui::PushFont(menuFont);
     ImGui::Begin("Debugger", nullptr);
     ImGui::DragFloat4("Color Clear", backgroundColor, 0.05f, 0.0f, 1.0);
     ImGui::DragFloat("Racket Speed", &racketSpeed,0.1f);
     ImGui::DragFloat("Ball Speed", &ballSpeed,0.1f);
+    ImGui::PopFont();
+    ImGui::End();
+}
+
+void UI::ScoreWindow()
+{
+    ImGui::Begin("##hidden", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoInputs | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoBackground);
+    ImGui::SetCursorPos(ImVec2(520, 0));
+    ImGui::PushFont(scoreFont);
+
+    std::string score = std::to_string(scoreA) + "\t" + std::to_string(scoreB);
+    ImGui::Text(score.c_str());
+    ImGui::PopFont();
     ImGui::End();
 }
 

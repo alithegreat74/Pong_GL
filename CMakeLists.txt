@@ -17,6 +17,7 @@ list(APPEND SRC_FILES ${ImGUI_SRC})
 include_directories(
 	"${CMAKE_SOURCE_DIR}/src"
 	"${ThirdParty_Dir}"
+	
 )
 
 #Setting the texture files
@@ -34,7 +35,14 @@ foreach(SHADER_FILE ${SHADER_FILES})
 	configure_file(${SHADER_FILE} "${CMAKE_BINARY_DIR}/src/Shaders/${FILE_NAME}" COPYONLY)
 endforeach()
 
-add_executable(PONG ${SRC_FILES} "src/Collision.h")
+#setting the font files
+file(GLOB FONT_FILES "${SRC_DIR}/Fonts/*.ttf")
+foreach(FONT_FILE ${FONT_FILES})
+	get_filename_component(FILE_NAME ${FONT_FILE} NAME)
+	configure_file(${FONT_FILE} "${CMAKE_BINARY_DIR}/src/Fonts/${FILE_NAME}" COPYONLY)
+endforeach()
+
+add_executable(PONG ${SRC_FILES} "src/Collision.h"  )
 
 if(MINGW)
 	target_link_libraries(PONG -lopengl32 -lgdi32 "${ThirdParty_Dir}/GLFW/libglfw3.a" imm32)

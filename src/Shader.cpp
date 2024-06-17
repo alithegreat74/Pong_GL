@@ -56,6 +56,7 @@ ShaderProgram::ShaderProgram(Shader vertexShader, Shader fragmentShader)
 	glAttachShader(object_id, fragmentShader.GetShader());
 
 	glLinkProgram(object_id);
+	Validate();
 
 	Unbind();
 

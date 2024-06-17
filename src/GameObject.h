@@ -67,4 +67,7 @@ public:
 	void HorizontalReverse();
 	void Restart();
 	glm::vec2 direction;
+private:
+	double lastCollisonTime;
 };
+

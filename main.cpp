@@ -2,7 +2,6 @@
 #include "GameObject.h"
 #include "UserInterface.h"
 #include "Input.h"
-
 //Configuring the Game object
 static Ball ball;
 static Racket racketA;
@@ -48,9 +47,10 @@ int main() {
     glfwSetKeyCallback(window, InputManager::Get().KeyboardCallback);
     //Callback Function Set Stop
 
-    //Configuring the shader files and shader program
+    //Configuring the shader files and shader programs
     Shader vertexShader("src/Shaders/VertexShader.glsl",GL_VERTEX_SHADER);
     Shader fragmentShader("src/Shaders/FragmentShader.glsl",GL_FRAGMENT_SHADER);
+
     ShaderProgram program(vertexShader, fragmentShader);
 
 
@@ -59,6 +59,9 @@ int main() {
     Texture2D defaultTexture(loader.LoadImage("src/Textures/DefaultTexture.png"));
     Texture2D defaultCircleTexture(loader.LoadImage("src/Textures/DefaultTextureCircle.png"));
 
+
+    
+    //Initialzie Free Type End
     UI::Init(window);
 
     //Running the start funcitons
@@ -77,10 +80,15 @@ int main() {
     Time::Get().CalculateTime();
     ball.direction = glm::vec3(1, -1, 0);
 
+
     while (!glfwWindowShouldClose(window)) {
         glClearColor(UI::backgroundColor[0], UI::backgroundColor[1], UI::backgroundColor[2], UI::backgroundColor[3]);
         glClear(GL_COLOR_BUFFER_BIT);
 
+
+        //User Interface Start
+        UI::RenderUI(window);
+        //User Interface End
 
         //Render Game Objects start
         ball.Render(defaultCircleTexture, program);
@@ -88,11 +96,7 @@ int main() {
         racketB.Render(defaultTexture, program);
         //Render Game Objects End
 
-        //User Interface Start
-        UI::RenderUI(window);
-        //User Interface End
 
-        
         //Swap the calculated color with the next color
         glfwSwapBuffers(window);
         //Check for events such as closing the window
