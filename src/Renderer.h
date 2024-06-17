@@ -2,39 +2,16 @@
 #include "References.h"
 #include "Shader.h"
 #include "Texture.h"
+#include "UserInterface.h"
 
-class VertexBufferObject:RendererObject {
-public:
-	//Creates a array buffer and loads the vertecies in the gpu
-	VertexBufferObject(const void* verticies, unsigned int size);
-	~VertexBufferObject();
-	//Sets it as the current array
-	void Bind()const;
-	//Unset it as the current array
-	void Unbind()const;
-};
+namespace Effects {
 
-class VertexArrayObject :RendererObject {
-public:
-	//Creates a vertex array
-	VertexArrayObject();
-	~VertexArrayObject();
-	//Set it as the current vertex array
-	void Bind()const;
-	//Unset it as the current vertex array
-	void Unbind()const;
-};
+	extern bool shake;
+	extern float shakeTime;
 
-class ElementBufferObject :RendererObject {
-public:
-	//Creates an element array buffer and loads the indicies in the gpu
-	ElementBufferObject(const void* indicies, unsigned int size);
-	~ElementBufferObject();
-	//Set it as the current element array
-	void Bind()const;
-	//Unset it as the current element array
-	void Unbind()const;
-};
+	void StartShake();
+	void RenderEffects();
+}
 
 /// <summary>
 /// The time class uses the singlton pattern so there's only one instance of it

@@ -11,6 +11,8 @@ namespace UI {
 	extern float backgroundColor[4];
 	extern float racketSpeed;
 	extern float ballSpeed;
+	extern float shakeTime;
+	extern float shakeStrength;
 	extern unsigned int scoreA, scoreB;
 	extern ImFont* scoreFont;
 	extern ImFont* menuFont;

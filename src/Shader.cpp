@@ -77,12 +77,13 @@ void ShaderProgram::Unbind() const
 	glUseProgram(0);
 }
 
-void ShaderProgram::ChangeUniform(const char* name, float data) const
+
+void ShaderProgram::ChangeSingleUniform(const char* name, float data) const
 {
 	glUniform1f(glGetUniformLocation(object_id, name), data);
 }
 
-void ShaderProgram::ChangeUniform(const char* name, int i1) const
+void ShaderProgram::ChangeSingleUniform(const char* name, int i1) const
 {
 	glUniform1i(glGetUniformLocation(object_id, name), i1);
 }

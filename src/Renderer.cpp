@@ -1,68 +1,25 @@
 #include "Renderer.h"
 
-VertexBufferObject::VertexBufferObject(const void* verticies, unsigned int size)
-{
-	glGenBuffers(1, &object_id);
-	Bind();
-	glBufferData(GL_ARRAY_BUFFER, size, verticies, GL_STATIC_DRAW);
-}
-
-VertexBufferObject::~VertexBufferObject()
-{
-	glDeleteBuffers(1, &object_id);
-}
-
-void VertexBufferObject::Bind() const
-{
-	glBindBuffer(GL_ARRAY_BUFFER, object_id);
-}
-
-void VertexBufferObject::Unbind() const
-{
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-}
-
-VertexArrayObject::VertexArrayObject()
-{
-	glGenVertexArrays(1, &object_id);
-	Bind();
-}
-
-VertexArrayObject::~VertexArrayObject()
-{
-	glDeleteVertexArrays(1, &object_id);
-}
-
-void VertexArrayObject::Bind() const
-{
-	glBindVertexArray(object_id);
-}
-
-void VertexArrayObject::Unbind() const
-{
-	glBindVertexArray(0);
-}
-
-ElementBufferObject::ElementBufferObject(const void* indicies, unsigned int size)
-{
-	glGenBuffers(1, &object_id);
-	Bind();
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, indicies, GL_STATIC_DRAW);
-}
-
-ElementBufferObject::~ElementBufferObject()
-{
-	glDeleteBuffers(1, &object_id);
-}
-
-void ElementBufferObject::Bind() const
-{
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, object_id);
-}
-
-void ElementBufferObject::Unbind() const
-{
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, object_id);
-}
+bool Effects::shake = false;
+float Effects::shakeTime = 0;
 
 Time Time::instance;
+
+void Effects::StartShake()
+{
+	//Set the shake components
+	shake = true;
+	shakeTime = UI::shakeTime;
+}
+
+//right now we only have the screen shake effect
+void Effects::RenderEffects()
+{
+	//if the shake time is over stop the shake
+	if (shakeTime <= 0) {
+		shake = false;
+		return;
+	}
+	//decrement shake time as it gets further
+	shakeTime -= Time::Get().DeltaTime();
+}

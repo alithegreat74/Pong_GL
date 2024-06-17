@@ -103,6 +103,9 @@ int main() {
         racketB.Render(defaultTexture, program);
         //Render Game Objects End
 
+        //Render The game Effects start
+        Effects::RenderEffects();
+        //Render the game effects end
 
         //Swap the calculated color with the next color
         glfwSwapBuffers(window);

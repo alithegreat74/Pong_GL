@@ -17,6 +17,10 @@ void GameObject::Render(Texture2D& texture, ShaderProgram& shader)
 	shader.Bind();
 	shader.ChangeUniform("color", color);
 	shader.ChangeUniform("transform", transform);
+	shader.ChangeSingleUniform("shake", (int)Effects::shake);
+	shader.ChangeSingleUniform("shakeStrength", UI::shakeStrength);
+	shader.ChangeSingleUniform("time", Effects::shakeTime);
+	std::cout << Effects::shakeTime << "\t" << Effects::shake<<"\n";
 	texture.Bind();
 	glBindVertexArray(vao);
 	glDrawArrays(GL_TRIANGLES, 0, 6);
@@ -151,6 +155,8 @@ void Ball::Move()
 			UI::scoreB++;
 		//Play Wining sound
 		Audio::PlayAudio("src/Audio/bleep.wav", false);
+		//Play the screen shake
+		Effects::StartShake();
 		Restart();
 	}
 	//If the ball is going out of bounds vertically

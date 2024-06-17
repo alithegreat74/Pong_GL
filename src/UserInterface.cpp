@@ -3,6 +3,8 @@
 float UI::backgroundColor[4]= { 0.0f, 0.0f, 0.0f,1.0f };
 float UI::racketSpeed = 5;
 float UI::ballSpeed = 5;
+float UI::shakeTime=0.5f;
+float UI::shakeStrength=0.005;
 
 unsigned int UI::scoreA=0, UI::scoreB=0;
 
@@ -47,7 +49,7 @@ void UI::Init(GLFWwindow*window)
     ImGui_ImplOpenGL3_Init("#version 330");
 
     scoreFont = io.Fonts->AddFontFromFileTTF("src/fonts/arial.ttf", 82.0f);
-    menuFont = io.Fonts->AddFontFromFileTTF("src/fonts/arial.ttf", 24.0);
+    menuFont = io.Fonts->AddFontFromFileTTF("src/fonts/arial.ttf", 16.0);
 
 
     // Setup ImGui style
@@ -61,6 +63,8 @@ void UI::DebugWindow()
     ImGui::DragFloat4("Color Clear", backgroundColor, 0.05f, 0.0f, 1.0);
     ImGui::DragFloat("Racket Speed", &racketSpeed, 0.1f);
     ImGui::DragFloat("Ball Speed", &ballSpeed, 0.1f);
+    ImGui::DragFloat("Shake Strength", &shakeStrength, 0.001f,0.0f,0.01f);
+    ImGui::DragFloat("Shake Time", &shakeTime, 0.1f);
     ImGui::PopFont();
     ImGui::End();
 }

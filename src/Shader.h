@@ -28,8 +28,9 @@ public:
 	//Unset it as the current active shader progran
 	void Unbind()const;
 	//Functions to change different uniform
-	void ChangeUniform(const char* name, float data)const;
-	void ChangeUniform(const char* name, int i1)const;
+	//void ChangeUniform(const char* name, int i1)const;
+	void ChangeSingleUniform(const char* name, int i1)const;
+	void ChangeSingleUniform(const char* name, float data)const;
 	void ChangeUniform(const char* name, float f1, float f2, float f3, float f4);
 	void ChangeUniform(const char* name, float f1, float f2, float f3);
 	void ChangeUniform(const char* name, glm::vec3 value);
