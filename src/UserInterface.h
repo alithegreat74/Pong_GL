@@ -6,6 +6,7 @@
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
 #include <string>
+#include "Input.h"
 
 namespace UI {
 	extern float backgroundColor[4];
@@ -21,5 +22,6 @@ namespace UI {
 
 	void DebugWindow();
 	void ScoreWindow();
+	void PauseMenu();
 	void CleanUp();
 }

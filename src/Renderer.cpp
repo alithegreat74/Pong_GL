@@ -21,5 +21,5 @@ void Effects::RenderEffects()
 		return;
 	}
 	//decrement shake time as it gets further
-	shakeTime -= Time::Get().DeltaTime();
+	shakeTime -= Time::Get().DeltaTime()*10;
 }

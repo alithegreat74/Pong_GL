@@ -20,7 +20,6 @@ void GameObject::Render(Texture2D& texture, ShaderProgram& shader)
 	shader.ChangeSingleUniform("shake", (int)Effects::shake);
 	shader.ChangeSingleUniform("shakeStrength", UI::shakeStrength);
 	shader.ChangeSingleUniform("time", Effects::shakeTime);
-	std::cout << Effects::shakeTime << "\t" << Effects::shake<<"\n";
 	texture.Bind();
 	glBindVertexArray(vao);
 	glDrawArrays(GL_TRIANGLES, 0, 6);
@@ -58,6 +57,10 @@ void GameObject::Start(glm::vec4 color, glm::vec3 pos,glm::vec3 scale)
 
 void GameObject::Move()
 {
+	//Don't move the object if it's on pause mode
+	if (GameManager::pause)
+		return;
+
 	transform = glm::translate(transform, glm::vec3(speed.x,speed.y,0.0) * Time::Get().DeltaTime());
 }
 
@@ -72,6 +75,7 @@ Racket::Racket():GameObject(),upKey(0),downKey(0),upWasPressed(0),downWasPressed
 
 void Racket::Listen()
 {
+	//Set up the input for the rackets
 	InputManager::Get().AddListerners(upKey, std::bind(&Racket::UpKeyCallback, this, std::placeholders::_1));
 	InputManager::Get().AddListerners(downKey, std::bind(&Racket::DownKeyCallback, this, std::placeholders::_1));
 }
@@ -95,6 +99,7 @@ void Racket::DownKeyCallback(int action)
 
 void Racket::SetInputs(int upKey, int downKey)
 {
+	//Configure the input button for the up and down key
 	this->upKey = upKey;
 	this->downKey = downKey;
 	Listen();
@@ -109,6 +114,7 @@ void Racket::Render(Texture2D& texture, ShaderProgram& shader)
 
 void Racket::HandleMovement()
 {
+	//set the speed of the racket based on the current input
 	if (upWasPressed == downWasPressed)
 		SetSpeed(glm::vec2(0, 0));
 	else
@@ -122,6 +128,7 @@ void Racket::HandleMovement()
 
 void Racket::Move()
 {
+	//If the racket reaches the bounds of the screen stop moving
 	if (transform[3].y + speed.y *Time::Get().DeltaTime() >= 0.9 || transform[3].y + speed.y * Time::Get().DeltaTime() <= -0.9)
 		return;
 
@@ -133,11 +140,12 @@ void Ball::Render(Texture2D& texture, ShaderProgram& shader)
 	Move();
 	GameObject::Render(texture,shader);
 	GameObject* collider = Collision::CheckCollisions(this);
+	//if there is no collsion with the ball don't do anything just return
 	if (collider==NULL)
 		return;
 	if (glfwGetTime() - lastCollisonTime <= 0.5)
 		return;
-
+	//store the last collsion so we can avoid multiple collsions with the same objects
 	lastCollisonTime = glfwGetTime();
 	color = collider->color;
 	//Play deflect sound
@@ -147,6 +155,10 @@ void Ball::Render(Texture2D& texture, ShaderProgram& shader)
 
 void Ball::Move()
 {
+	//Don't move the ball when it's on pause mode
+	if (GameManager::pause)
+		return;
+
 	//If the ball is going out of bounds horizontally add The score and restart the game
 	if ((transform[3].x >= 1.05 && direction.x > 0) || (transform[3].x <= -1.05f && direction.x < 0)) {
 		if (direction.x > 0)
@@ -157,6 +169,7 @@ void Ball::Move()
 		Audio::PlayAudio("src/Audio/bleep.wav", false);
 		//Play the screen shake
 		Effects::StartShake();
+		HorizontalReverse();
 		Restart();
 	}
 	//If the ball is going out of bounds vertically

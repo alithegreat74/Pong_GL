@@ -8,6 +8,7 @@
 /// <summary>
 /// We're gonna use a singlton for our input handler so there's only one instance of it and we can access it from all over the game
 /// We're also gonna use observer pattern. it is so each input listener is an observer and the input manager is the subject
+/// We assign a list of function to each button. then when there is a change in that button's state, we run those functions
 /// </summary>
 
 using InputCallback = std::function<void(int)>;
@@ -28,3 +29,9 @@ private:
 	static InputManager instance;
 	InputManager() = default;
 };
+
+
+namespace GameManager {
+	extern bool pause;
+	void OnPause(int action);
+}

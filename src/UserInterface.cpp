@@ -3,7 +3,7 @@
 float UI::backgroundColor[4]= { 0.0f, 0.0f, 0.0f,1.0f };
 float UI::racketSpeed = 5;
 float UI::ballSpeed = 5;
-float UI::shakeTime=0.5f;
+float UI::shakeTime=5.0f;
 float UI::shakeStrength=0.005;
 
 unsigned int UI::scoreA=0, UI::scoreB=0;
@@ -26,6 +26,9 @@ void UI::RenderUI(GLFWwindow* window) {
     //Show debug window
     DebugWindow();
 
+    //If it's on pause mode, show the pause menu
+    if (GameManager::pause)
+        PauseMenu();
 
     // Render ImGui
     ImGui::Render();
@@ -80,6 +83,18 @@ void UI::ScoreWindow()
     ImGui::PopFont();
     ImGui::End();
 }
+
+void UI::PauseMenu()
+{
+    ImGui::Begin("##hidden", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoInputs | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoBackground);
+    ImGui::SetCursorPos(ImVec2(450, 200));
+    ImGui::PushFont(scoreFont);
+    ImGui::Text("PAUSED");
+    ImGui::PopFont();
+    ImGui::End();
+
+}
+
 
 void UI::CleanUp()
 {

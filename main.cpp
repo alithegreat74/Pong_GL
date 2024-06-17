@@ -11,6 +11,14 @@ static Racket racketA;
 static Racket racketB;
 
 
+/// <summary>
+/// So this is a game of pong
+/// in this game we made three 2d game object which have a color and a texture 
+/// basically this is a sprite from normal game engines
+/// btw I had to make the window unresizable because it would have messed the scale of our game objects and UI
+/// I'm using ImGUI library for my UI
+/// </summary>
+
 int main() {
     //Initialize GLFW
     if (!glfwInit()) {
@@ -75,7 +83,7 @@ int main() {
     //Input configuration
     racketA.SetInputs(GLFW_KEY_W, GLFW_KEY_S);
     racketB.SetInputs(GLFW_KEY_UP, GLFW_KEY_DOWN);
-
+    InputManager::Get().AddListerners(GLFW_KEY_ESCAPE, GameManager::OnPause);   //To pause or unpause the game whenever the escape key is pressed
 
     //Add the collidable objects to the collision detector
     Collision::objects.push_back(&racketA);
@@ -88,6 +96,9 @@ int main() {
     //Play the game music on a loop
     Audio::PlayAudio("src/Audio/breakout.mp3",true);
 
+
+    //Make the window resizable
+    glfwSetWindowAttrib(window, GLFW_RESIZABLE, false);
     while (!glfwWindowShouldClose(window)) {
         glClearColor(UI::backgroundColor[0], UI::backgroundColor[1], UI::backgroundColor[2], UI::backgroundColor[3]);
         glClear(GL_COLOR_BUFFER_BIT);
@@ -112,6 +123,7 @@ int main() {
         //Check for events such as closing the window
         glfwPollEvents();
 
+        //Calculate delta time
         Time::Get().CalculateTime();
     }
 
