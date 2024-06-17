@@ -9,7 +9,6 @@ static Racket racketA;
 static Racket racketB;
 
 
-
 int main() {
     //Initialize GLFW
     if (!glfwInit()) {
@@ -71,9 +70,12 @@ int main() {
     racketA.SetInputs(GLFW_KEY_W, GLFW_KEY_S);
     racketB.SetInputs(GLFW_KEY_UP, GLFW_KEY_DOWN);
 
+    Collision::objects.push_back(&racketA);
+    Collision::objects.push_back(&racketB);
+
     //Setting the ball's initial speed
     Time::Get().CalculateTime();
-    ball.SetSpeed(glm::vec2(5, -5));
+    ball.direction = glm::vec3(1, -1, 0);
 
     while (!glfwWindowShouldClose(window)) {
         glClearColor(UI::backgroundColor[0], UI::backgroundColor[1], UI::backgroundColor[2], UI::backgroundColor[3]);
@@ -97,12 +99,6 @@ int main() {
         glfwPollEvents();
 
         Time::Get().CalculateTime();
-       
-
-        if (Collision::CheckCollision(Collision::GetCollisionSides(racketA.transform, racketA.size), Collision::GetCollisionSides(ball.transform, ball.size)) ||
-            Collision::CheckCollision(Collision::GetCollisionSides(racketB.transform, racketB.size), Collision::GetCollisionSides(ball.transform, ball.size))) {
-            ball.HorizontalReverse();
-        }
     }
     UI::CleanUp();
     //Destroy GLFW

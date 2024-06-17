@@ -39,9 +39,9 @@ public :
 	glm::mat4 transform;
 	glm::vec3 size;
 	glm::vec2 speed;
+	glm::vec4 color;
 protected:
 	unsigned int vbo, vao;
-	glm::vec4 color;
 };
 
 class Racket :public GameObject{
@@ -65,4 +65,6 @@ public:
 	void Move()override;
 	void VerticalReverse();
 	void HorizontalReverse();
+	void Restart();
+	glm::vec2 direction;
 };
