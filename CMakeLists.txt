@@ -54,10 +54,19 @@ add_executable(PONG ${SRC_FILES} "src/Collision.h"  )
 
 target_link_libraries(PONG "${ThirdParty_Dir}/GLFW/glfw3.lib" "${ThirdParty_Dir}/irrKlang/irrKlang.lib")
 
-
-add_custom_command(TARGET PONG POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different
-    "${ThirdParty_Dir}/irrKlang/irrKlang.dll"
-    "${ThirdParty_Dir}/irrKlang/ikpMP3.dll"
-    "${ThirdParty_Dir}/irrKlang/ikpFlac.dll"
-    $<TARGET_FILE_DIR:PONG>)
+if(CMAKE_SIZEOF_VOID_P EQUAL 8)
+	add_custom_command(TARGET PONG POST_BUILD
+			COMMAND ${CMAKE_COMMAND} -E copy_if_different
+			"${ThirdParty_Dir}/irrKlang/Win64/irrKlang.dll"
+			"${ThirdParty_Dir}/irrKlang/Win64/ikpMP3.dll"
+			"${ThirdParty_Dir}/irrKlang/Win64/ikpFlac.dll"
+			$<TARGET_FILE_DIR:PONG>)
+	
+else()
+	add_custom_command(TARGET PONG POST_BUILD
+		COMMAND ${CMAKE_COMMAND} -E copy_if_different
+		"${ThirdParty_Dir}/irrKlang/Win32/irrKlang.dll"
+		"${ThirdParty_Dir}/irrKlang/Win32/ikpMP3.dll"
+		"${ThirdParty_Dir}/irrKlang/Win32/ikpFlac.dll"
+		$<TARGET_FILE_DIR:PONG>)
+endif()
