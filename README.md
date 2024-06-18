@@ -40,8 +40,8 @@ so open up you directory and write this in cmd.(make sure you have cmake install
 
 ## Screenshots
 
-![Screenshot](pics/Screenshot 2024-06-17 203932.png)
+![Screenshot](pics/1.png)
 
-![Screenshot](pics/Screenshot 2024-06-17 203951.png)
+![Screenshot](pics/2.png)
 
-![Screenshot](pics/Screenshot 2024-06-17 204038.png)
+![Screenshot](pics/3.png)
