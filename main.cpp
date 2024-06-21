@@ -4,10 +4,6 @@
 #include "Input.h"
 #include "AudioManager.h"
 
-//Configuring the Game object
-static Ball ball;
-static Racket racketA;
-static Racket racketB;
 
 
 /// <summary>
@@ -17,6 +13,13 @@ static Racket racketB;
 /// btw I had to make the window unresizable because it would have messed the scale of our game objects and UI
 /// I'm using ImGUI library for my UI
 /// </summary>
+
+
+
+//Configuring the Game object
+static Ball ball;
+static Racket racketA;
+static Racket racketB;
 
 int main() {
     //Initialize GLFW
@@ -114,7 +117,8 @@ int main() {
 
         //Render The game Effects start
         Effects::RenderEffects();
-        emitter.RenderParticles(particleProgram, ball, defaultCircleTexture);
+        if(UI::ballTrail)
+            emitter.RenderParticles(particleProgram, ball, defaultCircleTexture);
         //Render the game effects end
         
         //Render Game Objects start

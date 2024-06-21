@@ -17,6 +17,7 @@ namespace UI {
 	extern unsigned int scoreA, scoreB;
 	extern ImFont* scoreFont;
 	extern ImFont* menuFont;
+	extern bool ballTrail;
 	void RenderUI(GLFWwindow*window);
 	void Init(GLFWwindow* window);
 

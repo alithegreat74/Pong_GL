@@ -11,6 +11,8 @@ unsigned int UI::scoreA=0, UI::scoreB=0;
 ImFont* UI::scoreFont;
 ImFont* UI::menuFont;
 
+bool UI::ballTrail = true;
+
 
 void UI::RenderUI(GLFWwindow* window) {
 
@@ -68,6 +70,7 @@ void UI::DebugWindow()
     ImGui::DragFloat("Ball Speed", &ballSpeed, 0.1f);
     ImGui::DragFloat("Shake Strength", &shakeStrength, 0.001f,0.0f,0.01f);
     ImGui::DragFloat("Shake Time", &shakeTime, 0.1f);
+    ImGui::Checkbox("Ball Trail On", &ballTrail);
     ImGui::PopFont();
     ImGui::End();
 }
