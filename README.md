@@ -45,10 +45,3 @@ so open up you directory and write this in cmd.(make sure you have cmake install
 ![Screenshot](Demo/2.png)
 
 ![Screenshot](Demo/3.png)
-
-
-## Demo
-
-[![Gameplay]
-(Demo/1.png)]
-(Demo/demo.mp4 "Gameplay")
