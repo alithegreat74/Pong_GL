@@ -98,6 +98,11 @@ void ShaderProgram::ChangeUniform(const char* name, float f1, float f2, float f3
 	glUniform3f(glGetUniformLocation(object_id, name), f1, f2, f3);
 }
 
+void ShaderProgram::ChangeUniform(const char* name, glm::vec2 value)
+{
+	glUniform2f(glGetUniformLocation(object_id, name), value.x, value.y);
+}
+
 void ShaderProgram::ChangeUniform(const char* name, glm::vec3 value)
 {
 	glUniform3f(glGetUniformLocation(object_id, name), value.x, value.y, value.z);

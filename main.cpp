@@ -4,7 +4,6 @@
 #include "Input.h"
 #include "AudioManager.h"
 
-
 //Configuring the Game object
 static Ball ball;
 static Racket racketA;
@@ -61,19 +60,24 @@ int main() {
     //Configuring the shader files and shader programs
     Shader vertexShader("src/Shaders/VertexShader.glsl",GL_VERTEX_SHADER);
     Shader fragmentShader("src/Shaders/FragmentShader.glsl",GL_FRAGMENT_SHADER);
-
+    Shader particleVertexShader("src/Shaders/ParticleVertexShader.glsl", GL_VERTEX_SHADER);
+    Shader particleFragmentShader("src/Shaders/ParticleFragmentShader.glsl", GL_FRAGMENT_SHADER);
     ShaderProgram program(vertexShader, fragmentShader);
+    ShaderProgram particleProgram(particleVertexShader, particleFragmentShader);
 
 
     //Configuring the Textures
     TextureLoader loader;
     Texture2D defaultTexture(loader.LoadImage("src/Textures/DefaultTexture.png"));
     Texture2D defaultCircleTexture(loader.LoadImage("src/Textures/DefaultTextureCircle.png"));
-
+    Texture2D particleTexture(loader.LoadImage("src/Textures/particle.png"));
 
     
     //Initialzie Free Type End
     UI::Init(window);
+
+    //Initialize the particle emitter
+    Effects::ParticleEmitter emitter;
 
     //Running the start funcitons
     ball.Start(glm::vec4(1.0), glm::vec3(0.0), glm::vec3(0.04, 0.075, 1.0));
@@ -108,15 +112,17 @@ int main() {
         UI::RenderUI(window);
         //User Interface End
 
+        //Render The game Effects start
+        Effects::RenderEffects();
+        emitter.RenderParticles(particleProgram, ball, defaultCircleTexture);
+        //Render the game effects end
+        
         //Render Game Objects start
         ball.Render(defaultCircleTexture, program);
         racketA.Render(defaultTexture,program);
         racketB.Render(defaultTexture, program);
         //Render Game Objects End
 
-        //Render The game Effects start
-        Effects::RenderEffects();
-        //Render the game effects end
 
         //Swap the calculated color with the next color
         glfwSwapBuffers(window);

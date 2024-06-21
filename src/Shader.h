@@ -33,6 +33,7 @@ public:
 	void ChangeSingleUniform(const char* name, float data)const;
 	void ChangeUniform(const char* name, float f1, float f2, float f3, float f4);
 	void ChangeUniform(const char* name, float f1, float f2, float f3);
+	void ChangeUniform(const char* name, glm::vec2 value);
 	void ChangeUniform(const char* name, glm::vec3 value);
 	void ChangeUniform(const char* name, glm::vec4 value);
 	void ChangeUniform(const char* name, glm::mat4 value);
