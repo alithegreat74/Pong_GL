@@ -40,8 +40,15 @@ so open up you directory and write this in cmd.(make sure you have cmake install
 
 ## Screenshots
 
-![Screenshot](pics/1.png)
+![Screenshot](demo/1.png)
 
-![Screenshot](pics/2.png)
+![Screenshot](demo/2.png)
 
-![Screenshot](pics/3.png)
+![Screenshot](demo/3.png)
+
+
+## Demo
+
+[![Gameplay]
+(demo/1.png)]
+(demo/demo.mp4 "Gameplay")
