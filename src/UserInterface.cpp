@@ -12,6 +12,7 @@ ImFont* UI::scoreFont;
 ImFont* UI::menuFont;
 
 bool UI::ballTrail = true;
+int UI::ballShape=-1;
 
 
 void UI::RenderUI(GLFWwindow* window) {
@@ -20,7 +21,6 @@ void UI::RenderUI(GLFWwindow* window) {
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
-
 
     //Show Score
     ScoreWindow();
@@ -63,6 +63,7 @@ void UI::Init(GLFWwindow*window)
 
 void UI::DebugWindow()
 {
+    const char* names[] = { "Circle", "Rectangle" };
     ImGui::PushFont(menuFont);
     ImGui::Begin("Debugger", nullptr);
     ImGui::DragFloat4("Color Clear", backgroundColor, 0.05f, 0.0f, 1.0);
@@ -71,6 +72,19 @@ void UI::DebugWindow()
     ImGui::DragFloat("Shake Strength", &shakeStrength, 0.001f,0.0f,0.01f);
     ImGui::DragFloat("Shake Time", &shakeTime, 0.1f);
     ImGui::Checkbox("Ball Trail On", &ballTrail);
+
+    if (ImGui::Button("Select Ball Shape"))
+        ImGui::OpenPopup("my_select_popup");
+    ImGui::SameLine();
+    ImGui::TextUnformatted(ballShape == -1 ? "<None>" : names[ballShape]);
+    if (ImGui::BeginPopup("my_select_popup"))
+    {
+        ImGui::SeparatorText("Ball Shape");
+        for (int i = 0; i < IM_ARRAYSIZE(names); i++)
+            if (ImGui::Selectable(names[i]))
+                ballShape = i;
+        ImGui::EndPopup();
+    }
     ImGui::PopFont();
     ImGui::End();
 }

@@ -113,15 +113,30 @@ int main() {
 
         //User Interface Start
         UI::RenderUI(window);
+        
         //User Interface End
 
         //Render The game Effects start
         Effects::RenderEffects();
-        if(UI::ballTrail)
+        if(UI::ballTrail && !GameManager::pause)
             emitter.RenderParticles(particleProgram, ball, defaultCircleTexture);
         //Render the game effects end
         
         //Render Game Objects start
+
+        //Render the ball based on it's chosen shape
+        switch (UI::ballShape)
+        {
+        case 0:
+            ball.Render(defaultCircleTexture, program);
+            break;
+        case 1:
+            ball.Render(defaultTexture, program);
+            break;
+        default:
+            ball.Render(defaultCircleTexture, program);
+            break;
+        }
         ball.Render(defaultCircleTexture, program);
         racketA.Render(defaultTexture,program);
         racketB.Render(defaultTexture, program);

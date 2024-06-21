@@ -81,7 +81,7 @@ void Effects::ParticleEmitter::RenderParticles(ShaderProgram& shader, Ball& ball
 		shader.Bind();
 		shader.ChangeUniform("color", particle.color);
 		shader.ChangeUniform("offset", particle.position);
-		shader.ChangeUniform("scale", glm::vec2(0.04f, 0.06));
+		shader.ChangeUniform("scale", glm::vec2(0.02f, 0.04));
 		texture.Bind();
 		glBindVertexArray(vao);
 
